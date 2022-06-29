@@ -37,8 +37,19 @@
                                 <a href="/{{ $route }}/delete/{{ $val }}"><button class='btn btn-danger'>Delete</button></a>
                             </td>
                         @endif
+                        
                         <td>
-                            {{ $val }}
+                        @if($route == 'peralatan' && $loop->last)
+                            @if($val['capt'] == "MENGEMBALIKAN")
+                                Sedang dipakai
+                            @else
+                                Dapat dipakai
+                            @endif
+                            <br/>
+                            <a href="/{{ $route }}/pakai/{{{ $val['id'] }}}"><button class='btn btn-{{{  $val['cls']  }}}'>{{{  $val['capt']  }}}</button></a>
+                        @else
+                            {{ $val }}   
+                        @endif
                         </td>
                     @endforeach
                 </tr>

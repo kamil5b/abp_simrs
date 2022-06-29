@@ -16,7 +16,15 @@ class obatController extends Controller
         $data = [];
         $obat = obat::all();
         foreach($obat as $p){
-            $tmp = array($p);
+            $tmp = [
+                'id'=>$p->id,
+                'nama_obat'=>$p->nama_obat,
+                'kode_obat'=>$p->kode_obat,
+                'kandungan'=>$p->kandungan,
+                'kuantitas'=>$p->kuantitas,
+                'tipe_kuantitas'=>$p->tipe_kuantitas,
+                'harga'=>$p->harga
+            ];
             array_push($data,$tmp);
         }
         //echo $data;

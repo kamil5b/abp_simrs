@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 */
 use App\Http\Controllers\pasienController;
 use App\Http\Controllers\obatController;
+use App\Http\Controllers\peralatanController;
 use App\Http\Controllers\loginController;
 use App\Http\Controllers\karyawanController;
 
@@ -99,4 +100,30 @@ Route::post('/obat/edit',function (Request $request) {
 })->middleware('auth');
 Route::get('/obat/delete/{id}',function ($id) {
     return obatController::delete($id);
+})->middleware('auth');
+
+//peralatan
+Route::get('/peralatan', function () {
+    if (Auth::check()) {
+        return peralatanController::index();
+    }
+    return loginController::index();
+});
+Route::get('/peralatan/add',function () {
+    return peralatanController::add();
+})->middleware('auth');
+Route::post('/peralatan/add',function (Request $request) {
+    return peralatanController::add_action($request);
+})->middleware('auth');
+Route::get('/peralatan/edit/{id}',function ($id) {
+    return peralatanController::edit($id);
+})->middleware('auth');
+Route::get('/peralatan/pakai/{id}',function ($id) {
+    return peralatanController::change_status($id);
+})->middleware('auth');
+Route::post('/peralatan/edit',function (Request $request) {
+    return peralatanController::edit_action($request);
+})->middleware('auth');
+Route::get('/peralatan/delete/{id}',function ($id) {
+    return peralatanController::delete($id);
 })->middleware('auth');

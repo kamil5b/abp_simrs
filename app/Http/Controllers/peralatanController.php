@@ -9,14 +9,31 @@ class peralatanController extends Controller
 {
 
     //private $admin = true;
-
     public function index(){
         $user = session()->get('data');
         
         $data = [];
         $peralatan = peralatan::all();
         foreach($peralatan as $p){
-            $tmp = array($p);
+            $cls='success';
+            $capt='PAKAI';
+            if($p->dipakai){
+                $cls='danger';
+                $capt='MENGEMBALIKAN';
+            }
+            $pakai = `<a href="/peralatan/pakai/$p->id"><button class='btn btn-$cls'>$capt</button></a>`;
+        
+            $tmp = [
+                'id'=>$p->id,
+                'nama_peralatan'=>$p->nama_peralatan,
+                'kode_peralatan'=>$p->kode_peralatan,
+                'lokasi'=>$p->lokasi,
+                'dipakai'=>[
+                    'id'=>$p->id,
+                    'cls'=>$cls,
+                    'capt'=>$capt
+                ],
+            ];
             array_push($data,$tmp);
         }
         //echo $data;
@@ -33,7 +50,7 @@ class peralatanController extends Controller
             ],
             'data' => $data,
             'head' => [
-                'ID','Nama Peralatan', 'Kode Peralatan','Kandungan', 'Kuantitas', 'Tipe_Kuantitas','Harga'
+                'ID','Nama Peralatan', 'Kode Peralatan','Lokasi', 'Dipakai'
             ],
             "edit" => true
         ];
@@ -63,28 +80,10 @@ class peralatanController extends Controller
                 ],
                 
                 [
-                    'type' => 'textarea',
-                    'name' => 'kandungan',
-                    'placeholder' => 'Kandungan'
-                ],
-                [
-                    'type' => 'number',
-                    'name' => 'kuantitas',
-                    'placeholder' => 'Kuantitas'
-                ],
-                
-                [
                     'type' => 'text',
-                    'name' => 'tipe_kuantitas',
-                    'placeholder' => 'Tipe Kuantitas'
+                    'name' => 'lokasi',
+                    'placeholder' => 'Lokasi'
                 ],
-                
-                [
-                    'type' => 'number',
-                    'name' => 'harga',
-                    'placeholder' => 'Harga'
-                ],
-                
             ]
         ]);
     }
@@ -95,10 +94,8 @@ class peralatanController extends Controller
             peralatan::create([
                 'nama_peralatan' => $request->nama_peralatan,
                 'kode_peralatan' => $request->kode_peralatan,
-                'kuantitas' => $request->kuantitas,
-                'kandungan' => $request->kandungan,
-                'tipe_kuantitas' => $request->tipe_kuantitas,
-                'harga' => $request->harga
+                'lokasi' => $request->lokasi,
+                'dipakai' => false,
             ]);
         }
         catch(\Illuminate\Database\QueryException $e)
@@ -109,7 +106,6 @@ class peralatanController extends Controller
         // alihkan halaman ke halaman sebelumnya
         return redirect('/peralatan');
     }
-/*
     public function edit($id){
         $data = peralatan::where('id', $id)->first();
         return view('add',[
@@ -122,7 +118,7 @@ class peralatanController extends Controller
                     'type' => 'text',
                     'name' => 'nama_peralatan',
                     'placeholder' => 'Nama Peralatan',
-                    'value' => $data->nama_peralatan 
+                    'value' => $data->nama_peralatan
                 ],
                 
                 [
@@ -133,37 +129,16 @@ class peralatanController extends Controller
                 ],
                 
                 [
-                    'type' => 'textarea',
-                    'name' => 'kandungan',
-                    'placeholder' => 'Kandungan',
-                    'value' => $data->kandungan 
-                ],
-                [
-                    'type' => 'number',
-                    'name' => 'kuantitas',
-                    'placeholder' => 'Kuantitas',
-                    'value' => $data->kuantitas 
-                ],
-                
-                [
                     'type' => 'text',
-                    'name' => 'tipe_kuantitas',
-                    'placeholder' => 'Tipe Kuantitas',
-                    'value' => $data->tipe_kuantitas 
-                ],
-                
-                [
-                    'type' => 'number',
-                    'name' => 'harga',
-                    'placeholder' => 'Harga',
-                    'value' => $data->harga 
+                    'name' => 'lokasi',
+                    'placeholder' => 'Lokasi',
+                    'value' => $data->lokasi
                 ],
             ]
         ]);
     }
-*/
-    public function change_status(Request $request){
-        $peralatan = peralatan::find($request->id);
+    public function change_status($id){
+        $peralatan = peralatan::find($id);
         $peralatan->dipakai = !$peralatan->dipakai;
         $peralatan->save();
         // alihkan halaman ke halaman sebelumnya
