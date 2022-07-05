@@ -27,24 +27,47 @@ class obatController extends Controller
             ];
             array_push($data,$tmp);
         }
-        //echo $data;
         $contents = [
             'title' => 'obat',
             'route' => 'obat',
             'description' => 'Data seluruh obat',
-            'name' => $user->nama_lengkap,
+            'name' =>$user->name,
             'sidebar_items' => [
                 "Pasien" => '/pasien',
                 "Karyawan" => '/karyawan',
                 "Obat" => '/obat',
                 "Peralatan" => '/peralatan',
+                "Kamar" => '/kamar',
+                "Medical Record" => '/records'
             ],
             'data' => $data,
             'head' => [
                 'ID','Nama Obat', 'Kode Obat','Kandungan', 'Kuantitas', 'Tipe_Kuantitas','Harga'
             ],
-            "edit" => true
+            "edit" =>false,
+            'no_add'=>true
         ];
+        if($user->role == "Apoteker"){
+            $contents = [
+                'title' => 'obat',
+                'route' => 'obat',
+                'description' => 'Data seluruh obat',
+                'name' => $user->name,
+                'sidebar_items' => [
+                    "Pasien" => '/pasien',
+                    "Karyawan" => '/karyawan',
+                    "Obat" => '/obat',
+                    "Peralatan" => '/peralatan',
+                    "Kamar" => '/kamar',
+                    "Medical Record" => '/records'
+                ],
+                'data' => $data,
+                'head' => [
+                    'ID','Nama Obat', 'Kode Obat','Kandungan', 'Kuantitas', 'Tipe_Kuantitas','Harga'
+                ],
+                'edit' => true,
+            ];
+        }
         /*if(self::admin == true){
             $contents["edit"] = true;
         }*/

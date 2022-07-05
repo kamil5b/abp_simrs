@@ -15,6 +15,8 @@ use Illuminate\Http\Request;
 |
 */
 use App\Http\Controllers\pasienController;
+use App\Http\Controllers\kamarController;
+use App\Http\Controllers\recordsController;
 use App\Http\Controllers\obatController;
 use App\Http\Controllers\peralatanController;
 use App\Http\Controllers\loginController;
@@ -126,4 +128,48 @@ Route::post('/peralatan/edit',function (Request $request) {
 })->middleware('auth');
 Route::get('/peralatan/delete/{id}',function ($id) {
     return peralatanController::delete($id);
+})->middleware('auth');
+
+//kamar
+Route::get('/kamar', function () {
+    if (Auth::check()) {
+        return kamarController::index();
+    }
+    return loginController::index();
+});
+Route::get('/kamar/add',function () {
+    return kamarController::add();
+})->middleware('auth');
+Route::post('/kamar/add',function (Request $request) {
+    return kamarController::add_action($request);
+})->middleware('auth');
+Route::get('/kamar/edit/{id}',function ($id) {
+    return kamarController::edit($id);
+})->middleware('auth');
+Route::post('/kamar/edit',function (Request $request) {
+    return kamarController::edit_action($request);
+})->middleware('auth');
+Route::get('/kamar/delete/{id}',function ($id) {
+    return kamarController::delete($id);
+})->middleware('auth');
+
+
+//records
+Route::get('/records', function () {
+    if (Auth::check()) {
+        return recordsController::index();
+    }
+    return loginController::index();
+});
+Route::get('/records/add/{id}',function ($id) {
+    return recordsController::add($id);
+})->middleware('auth');
+Route::post('/records/add',function (Request $request) {
+    return recordsController::add_action($request);
+})->middleware('auth');
+Route::get('/records/gate/{id}',function ($id) {
+    return recordsController::gate($id);
+})->middleware('auth');
+Route::post('/records/gate',function (Request $request) {
+    return recordsController::detail($request);
 })->middleware('auth');

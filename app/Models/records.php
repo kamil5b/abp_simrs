@@ -16,6 +16,7 @@ class records extends Model
             $table->string('encode_record');
     */
     protected $fillable = [
+        'tanggal',
         'pasien_id',
         'dokter_id',
         'encode_record'

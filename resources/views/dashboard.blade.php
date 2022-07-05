@@ -6,7 +6,11 @@
 </div>
 <p>{{ $description }}</p>
 @if(!isset($no_add))
-    <a href="/{{ $route }}/add">
+    @if($route == "records")
+        <a href="/{{ $route }}/add/{{ $id }}">
+    @else
+        <a href="/{{ $route }}/add">
+    @endif
     <button class="btn btn-success">
         Add
     </button>
@@ -16,14 +20,17 @@
     <table class="table">
         <thead>
             <tr>
-                @if(isset($edit))
+                @if($edit && $route != "records")
                     <th>Edit</th>
                 @endif
                 @foreach ($head as $col)
-                <td>
+                <th>
                     {{ $col }}
-                </td>
+                </th>
                 @endforeach
+                @if($edit && $route == "records")
+                    <th>Details</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -31,7 +38,7 @@
                 <tr>
                     
                     @foreach ($row as $val)
-                        @if(isset($edit) && $loop->first)
+                        @if($edit && $loop->first && $route != "records")
                             <td>
                                 <a href="/{{ $route }}/edit/{{ $val }}"><button class='btn btn-primary'>Edit</button></a>
                                 <a href="/{{ $route }}/delete/{{ $val }}"><button class='btn btn-danger'>Delete</button></a>
@@ -47,11 +54,17 @@
                             @endif
                             <br/>
                             <a href="/{{ $route }}/pakai/{{{ $val['id'] }}}"><button class='btn btn-{{{  $val['cls']  }}}'>{{{  $val['capt']  }}}</button></a>
+                        
                         @else
                             {{ $val }}   
                         @endif
                         </td>
                     @endforeach
+                    @if($route == 'records' && $edit)
+                        <td>
+                            <a href="/{{ $route }}/gate/{{{ $row[0] }}}"><button class='btn btn-primary'>Details</button></a>
+                        </td>
+                    @endif
                 </tr>
             @endforeach
         </tbody>

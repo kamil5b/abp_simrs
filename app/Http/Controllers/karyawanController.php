@@ -11,7 +11,7 @@ use Illuminate\Database\QueryException;
 class karyawanController extends Controller
 {
     public function index(){
-        $user = session()->get('data');
+        $User = session()->get('data');
         
         $data = [];
         $karyawan = karyawan::all();
@@ -35,18 +35,20 @@ class karyawanController extends Controller
             'title' => 'karyawan',
             'route' => 'karyawan',
             'description' => 'Data seluruh karyawan',
-            'name' => $orang->nama_lengkap,
+            'name' => $User->name,
             'sidebar_items' => [
                 "Pasien" => '/pasien',
                 "Karyawan" => '/karyawan',
                 "Obat" => '/obat',
                 "Peralatan" => '/peralatan',
+                "Kamar" => '/kamar',
+                "Medical Record" => '/records'
             ],
             'data' => $data,
             'head' => [
                 'ID','Nama Lengkap', 'Nomor HP','Tanggal Lahir', 'Kelamin', 'Alamat', 'Gaji', 'Role'
             ],
-            "edit" => true,
+            "edit" => $User->role == "Admin",
             "no_add" => true
         ];
         /*if(self::admin == true){
@@ -131,14 +133,7 @@ class karyawanController extends Controller
                     'type' => 'text',
                     'name' => 'nama_lengkap',
                     'placeholder' => 'Nama Lengkap',
-                    'value' => $orang->nama_lengkap
-                ],
-                
-                [
-                    'type' => 'text',
-                    'name' => 'nomor_hp',
-                    'placeholder' => "NomorHP",
-                    'value' => $orang->nomor_hp
+                    'value' => `$orang->nama_lengkap`
                 ],
                 
                 [
@@ -163,7 +158,7 @@ class karyawanController extends Controller
                     'type' => 'textarea',
                     'name' => 'alamat',
                     'placeholder' => 'Alamat',
-                    'value' => $orang->alamat
+                    'value' => `$orang->alamat`
                 ],
                 [
                     'type' => 'number',
@@ -192,11 +187,15 @@ class karyawanController extends Controller
         $karyawan = karyawan::where('id', $request->id)->first();
         $orang = orang::find($karyawan->orang_id);
         $orang->nama_lengkap = $request->nama_lengkap;
-        $orang->nomor_hp = $request->nomor_hp;
         $orang->tanggal_lahir = $request->tanggal_lahir;
         $orang->kelamin = $request->kelamin;
         $orang->alamat = $request->alamat;
         $orang->save();
+
+        $user = User::find($karyawan->user_id);
+        $user->name = $request->nama_lengkap;
+        $user->role = $request->role;
+        $user->save();
         // alihkan halaman ke halaman sebelumnya
         return redirect('/karyawan');
     }

@@ -41,19 +41,44 @@ class peralatanController extends Controller
             'title' => 'peralatan',
             'route' => 'peralatan',
             'description' => 'Data seluruh peralatan',
-            'name' => $user->nama_lengkap,
+            'name' => $user->name,
             'sidebar_items' => [
                 "Pasien" => '/pasien',
                 "Karyawan" => '/karyawan',
                 "Obat" => '/obat',
                 "Peralatan" => '/peralatan',
+                "Kamar" => '/kamar',
+                "Medical Record" => '/records'
             ],
             'data' => $data,
             'head' => [
                 'ID','Nama Peralatan', 'Kode Peralatan','Lokasi', 'Dipakai'
             ],
-            "edit" => true
+            "edit" => false,
+            "no_add" => false
         ];
+        if($user->role == "Admin"){
+                
+            $contents = [
+                'title' => 'peralatan',
+                'route' => 'peralatan',
+                'description' => 'Data seluruh peralatan',
+                'name' => $user->name,
+                'sidebar_items' => [
+                    "Pasien" => '/pasien',
+                    "Karyawan" => '/karyawan',
+                    "Obat" => '/obat',
+                    "Peralatan" => '/peralatan',
+                    "Kamar" => '/kamar',
+                    "Medical Record" => '/records'
+                ],
+                'data' => $data,
+                'head' => [
+                    'ID','Nama Peralatan', 'Kode Peralatan','Lokasi', 'Dipakai'
+                ],
+                "edit" => true
+            ];
+        }
         /*if(self::admin == true){
             $contents["edit"] = true;
         }*/

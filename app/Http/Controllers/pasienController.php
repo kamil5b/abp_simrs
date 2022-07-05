@@ -51,18 +51,21 @@ class pasienController extends Controller
             'title' => 'Pasien',
             'route' => 'pasien',
             'description' => 'Data seluruh pasien',
-            'name' => $user->nama_lengkap,
+            'name' => $user->name,
             'sidebar_items' => [
                 "Pasien" => '/pasien',
                 "Karyawan" => '/karyawan',
                 "Obat" => '/obat',
                 "Peralatan" => '/peralatan',
+                "Kamar" => '/kamar',
+                "Medical Record" => '/records'
             ],
             'data' => $data,
             'head' => [
                 'ID','Nama Lengkap', 'Nomor HP','Tanggal Lahir', 'Kelamin', 'Alamat'
             ],
-            "edit" => true
+            "edit" => $user->role == "Admin" || $user->role == "Perawat",
+            "no_add" => $user->role == "Admin" || $user->role == "Perawat"
         ];
         /*if(self::admin == true){
             $contents["edit"] = true;

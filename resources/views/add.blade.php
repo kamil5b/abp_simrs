@@ -17,26 +17,26 @@
                         <select class="form-select" name={{ $row["name"] }} required>
                             <option value="" selected disabled>{{ $row["placeholder"] }}</option>
                             @foreach($row["options"] as $key => $val)
-                                <option value={{ $key }} {{ $key == $row["value"] ? 'selected' : '' }} >{{ $val }}</option>
+                                <option value="{{ $key }}" {{ $key == $row["value"] ? 'selected' : '' }} >{{ $val }}</option>
                             @endforeach
                         </select>
                     @elseif($row["type"] == "textarea")
-                        <textarea class="form-control" name={{ $row["name"] }} value={{ $row["value"] }} rows="3"></textarea>
+                        <textarea class="form-control" name={{ $row["name"] }} value="{{ $row["value"] }}" rows="3"></textarea>
                     @else
-                        <input class="form-control" type={{ $row["type"] }} name={{ $row["name"] }} value={{ $row["value"] }}>
+                        <input class="form-control" type={{ $row["type"] }} name={{ $row["name"] }} value="{{ $row["value"] }}">
                     @endif
                 @else
                     @if($row["type"] == "select")
                         <select class="form-select" name={{ $row["name"] }} required>
                             <option value="" selected disabled>{{ $row["placeholder"] }}</option>
                             @foreach($row["options"] as $key => $val)
-                                <option value={{ $key }}>{{ $val }}</option>
+                                <option value="{{ $key }}">{{ $val }}</option>
                             @endforeach
                         </select>
                     @elseif($row["type"] == "textarea")
-                        <textarea class="form-control" name={{ $row["name"] }} placeholder={{ $row["placeholder"] }} rows="3"></textarea>
+                        <textarea class="form-control" name={{ $row["name"] }} placeholder="{{ $row["placeholder"] }}" rows="3"></textarea>
                     @else
-                        <input class="form-control" type={{ $row["type"] }} name={{ $row["name"] }} placeholder={{ $row["placeholder"] }}>
+                        <input class="form-control" type={{ $row["type"] }} name={{ $row["name"] }} placeholder="{{ $row["placeholder"] }}">
                     @endif
                 @endif
             </div>

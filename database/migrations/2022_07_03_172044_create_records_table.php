@@ -1,3 +1,4 @@
+
 <?php
 
 use Illuminate\Database\Migrations\Migration;
@@ -15,10 +16,11 @@ class CreateRecordsTable extends Migration
     {
         Schema::create('records', function (Blueprint $table) {
             $table->id();
+            $table->date('tanggal');
             $table->unsignedBigInteger('pasien_id');
             $table->foreign('pasien_id')->references('id')->on('pasiens');
             $table->unsignedBigInteger('dokter_id');
-            $table->foreign('dokter_id')->references('id')->on('karyawans');
+            $table->foreign('dokter_id')->references('id')->on('Users');
             $table->string('encode_record');
             $table->timestamps();
         });

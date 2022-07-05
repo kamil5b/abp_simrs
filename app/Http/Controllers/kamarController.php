@@ -18,15 +18,24 @@ class kamarController extends Controller
         $data = [];
         $kamar = kamar::all();
         foreach($kamar as $p){
-            $orang = orang::where('id', $p->orang_id )->first();
             $tmp = [
                 $p->id,
-                $orang->nama_lengkap,
-                $orang->nomor_hp,
-                $orang->tanggal_lahir,
-                $orang->kelamin,
-                $orang->alamat
+                $p->no_ruangan,
+                "-",
+                "-",
+                "-",
             ];
+            if(isset($p->pasien_id)){
+                $pas = orang::where('id', $p->pasien_id )->first();
+                $orang = orang::where('id', $pas->orang_id )->first();
+                $tmp = [
+                    $p->id,
+                    $p->no_ruangan,
+                    $orang->nama_lengkap,
+                    $orang->nomor_hp,
+                    $p->diagnosa,
+                ];
+            }
             array_push($data,$tmp);
         }
         //echo $data;
@@ -34,12 +43,14 @@ class kamarController extends Controller
             'title' => 'kamar',
             'route' => 'kamar',
             'description' => 'Data seluruh kamar',
-            'name' => $user->nama_lengkap,
+            'name' => $user->name,
             'sidebar_items' => [
                 "Pasien" => '/pasien',
                 "Karyawan" => '/karyawan',
                 "Obat" => '/obat',
                 "Peralatan" => '/peralatan',
+                "Kamar" => '/kamar',
+                "Medical Record" => '/records'
             ],
             'data' => $data,
             'head' => [

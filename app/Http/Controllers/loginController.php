@@ -23,7 +23,7 @@ class loginController extends Controller
         ]);
  
         if (Auth::attempt($credentials)) {
-            $orang = orang::where('nomor_hp', $request->nomor_hp)->first();
+            $orang = User::where('nomor_hp', $request->nomor_hp)->first();
             $request->session()->regenerate();
             $request->session()->put('data',$orang);
             
@@ -57,13 +57,17 @@ class loginController extends Controller
             $validatedData['password'] = Hash::make($validatedData['password']);
         
             $user = User::create($validatedData);
-            $orang = orang::create([
-                'nama_lengkap' => $request->name,
-                'nomor_hp' => $request->nomor_hp,
-                'tanggal_lahir' => $request->tanggal_lahir,
-                'kelamin' => $request->kelamin,
-                'alamat' => $request->alamat
-            ]);
+            $orang = orang::where('nomor_hp',$request->nomor_hp)->first();
+            if(orang::where('nomor_hp',$request->nomor_hp)->doesntExist()){
+                $orang = orang::create([
+                    'nama_lengkap' => $request->name,
+                    'nomor_hp' => $request->nomor_hp,
+                    'tanggal_lahir' => $request->tanggal_lahir,
+                    'kelamin' => $request->kelamin,
+                    'alamat' => $request->alamat
+                ]);
+            }
+            
             karyawan::create([
                 'user_id' => $user->id,
                 'orang_id' => $orang->id,
